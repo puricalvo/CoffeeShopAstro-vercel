@@ -16,30 +16,21 @@ export async function api(
     }
   };
 
-  // Si enviamos un FormData, lo usamos directamente
   if (body instanceof FormData) {
 
     options.body = body;
 
-  // Si es un objeto, lo convertimos en URLSearchParams
   } else if (body && typeof body === "object") {
 
     options.body = new URLSearchParams(
       body as Record<string, string>
     );
 
-  // Si ya viene preparado (string, etc.)
   } else if (body) {
 
     options.body = body;
 
   }
-
-  console.log("================================");
-  console.log("API REQUEST URL:", requestUrl);
-  console.log("API REQUEST METHOD:", method);
-  console.log("API KEY PRESENT:", !!API_KEY);
-  console.log("================================");
 
   const response = await fetch(
     requestUrl,
@@ -48,25 +39,12 @@ export async function api(
 
   const contentType = response.headers.get("content-type");
 
-  console.log("================================");
-  console.log("API RESPONSE STATUS:", response.status);
-  console.log("API RESPONSE CONTENT-TYPE:", contentType);
-  console.log("API RESPONSE URL:", response.url);
-  console.log("================================");
-
   const responseText = await response.text();
-
-  console.log("================================");
-  console.log(
-    "API RESPONSE BODY:",
-    responseText.substring(0, 500)
-  );
-  console.log("================================");
 
   if (!response.ok) {
 
     throw new Error(
-      `Error ${response.status}: ${response.statusText}`
+      `API ERROR | URL: ${requestUrl} | STATUS: ${response.status} | CONTENT-TYPE: ${contentType} | RESPONSE: ${responseText.substring(0, 500)}`
     );
   }
 
@@ -76,16 +54,8 @@ export async function api(
 
   } catch (error) {
 
-    console.log("================================");
-    console.log("API JSON PARSE ERROR");
-    console.log("REQUEST URL:", requestUrl);
-    console.log("CONTENT-TYPE:", contentType);
-    console.log(
-      "RESPONSE START:",
-      responseText.substring(0, 500)
+    throw new Error(
+      `API JSON ERROR | URL: ${requestUrl} | STATUS: ${response.status} | CONTENT-TYPE: ${contentType} | RESPONSE: ${responseText.substring(0, 500)}`
     );
-    console.log("================================");
-
-    throw error;
   }
 }
