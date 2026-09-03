@@ -10,7 +10,7 @@ export async function api(
   const options: RequestInit = {
     method,
     headers: {
-      Authorization: API_KEY
+      "X-API-KEY": API_KEY
     }
   };
 
