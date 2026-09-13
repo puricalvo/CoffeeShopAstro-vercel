@@ -26,27 +26,41 @@
     import L from 'leaflet'
     import "leaflet/dist/leaflet.css"
 
+    import markerIcon from 'leaflet/dist/images/marker-icon.png'
+    import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+    import markerShadow from 'leaflet/dist/images/marker-shadow.png'
+
+    delete (L.Icon.Default.prototype as any)._getIconUrl
+
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: markerIcon2x,
+        iconUrl: markerIcon,
+        shadowUrl: markerShadow,
+    })
+
     class LocationData extends HTMLElement {
         connectedCallback() {
-           const lat = this.dataset.lat
-           const lng = this.dataset.lng
-           const zoom = this.dataset.zoom
-           const label = this.dataset.label
-           
-           if (lat && lng && zoom && label) {
+            const lat = this.dataset.lat
+            const lng = this.dataset.lng
+            const zoom = this.dataset.zoom
+            const label = this.dataset.label
 
-            const map = L.map("map").setView([+lat, +lng], +zoom);
+            if (lat && lng && zoom && label) {
 
-                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-                    .addTo(map);
+                const map = L.map("map").setView(
+                    [+lat, +lng],
+                    +zoom
+                )
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                ).addTo(map)
 
                 L.marker([+lat, +lng])
                     .addTo(map)
                     .bindPopup(label)
-                    .openPopup();
-
+                    .openPopup()
             }
-
         }
     }
 
