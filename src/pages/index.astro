@@ -3,8 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import { getPage, getTable } from "@/services/pages";
 import { decode } from "@/services/utils";
 import CategoryIconLabel from "@/components/ui/CategoryIconLabel.astro";
-import HomeGallery from "@/components/gallery/HomeGallery.astro";
-import ProductsMenu from "@/components/menu/ProductsMenu.astro";
+
 
 const page = await getPage("inicio");
 const content = await getTable("inicios");
@@ -33,10 +32,6 @@ const inicio = content[0];
         <CategoryIconLabel icon="icon_dessert.svg" text="Postres" />
         <CategoryIconLabel icon="icon_tea.svg" text="Té" />
     </div>
-
-    
-     <HomeGallery slot="after-main-content" />
-    <ProductsMenu slot="after-main-content" /> 
-    
+ 
 
 </Layout>
